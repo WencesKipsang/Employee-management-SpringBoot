@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -14,6 +15,7 @@ import com.wences.employeeApp.service.UserService;
 
 @Configuration
 @EnableWebSecurity
+//public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 public class SecurityConfiguration {
 
 	@Autowired
@@ -28,10 +30,10 @@ public class SecurityConfiguration {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 				.authorizeHttpRequests((authorize) ->
-						authorize.requestMatchers("/registration**").permitAll()
-								.requestMatchers("/js/**").permitAll()
-								.requestMatchers("/css/**").permitAll()
-								.requestMatchers("/img/**").permitAll()
+						authorize.requestMatchers("/registration**" , "/js/**" , "/css/**" , "/img/**" , "/assets/**").permitAll()
+				
+//								.requestMatchers("/index**").hasRole("USER")
+								.anyRequest().authenticated() 
 				).formLogin(
 						form -> form
 								.loginPage("/login")
@@ -43,6 +45,7 @@ public class SecurityConfiguration {
 				);
 		return http.build();
 	}
+        
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
